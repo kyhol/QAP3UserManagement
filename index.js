@@ -11,7 +11,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(
   session({
-    secret: "replace_this_with_a_secure_key",
+    secret: "rdj82jd92j3d92jd92jd2",
     resave: false,
     saveUninitialized: true,
   })
