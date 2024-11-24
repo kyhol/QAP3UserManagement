@@ -72,7 +72,19 @@ app.get("/signup", (request, response) => {
 
 // POST /signup - Allows a user to signup
 app.post("/signup", (request, response) => {
-  const { username, email, password } = request.body;
+  const {
+    username,
+    email,
+    password,
+    "confirm-password": confirmPassword,
+  } = request.body;
+
+  // Check if passwords match
+  if (password !== confirmPassword) {
+    return response.render("signup", {
+      error: "Passwords do not match",
+    });
+  }
 
   // Check if email already exists
   if (USERS.find((u) => u.email === email)) {
@@ -83,16 +95,15 @@ app.post("/signup", (request, response) => {
 
   // Create new user
   const newUser = {
-    id: USERS.length + 1, // Generate new id
+    id: USERS.length + 1,
     username,
     email,
-    password: bcrypt.hashSync(password, SALT_ROUNDS), // Hash the password
-    role: "user", // Regular user
+    password: bcrypt.hashSync(password, SALT_ROUNDS),
+    role: "user",
   };
 
-  USERS.push(newUser); // Add to USERS array
-
-  response.redirect("/login"); // Redirect to login page
+  USERS.push(newUser);
+  response.redirect("/login");
 });
 
 // GET / - Render index page or redirect to landing if logged in
@@ -104,8 +115,34 @@ app.get("/", (request, response) => {
 });
 
 // GET /landing - Shows a welcome page for users, shows the names of all users if an admin
-app.get("/landing", (request, response) => {});
+app.get("/landing", (request, response) => {
+  // Check if user is logged in
+  if (!request.session.user) {
+    return response.redirect("/login");
+  }
 
+  // If user is admin, show all users
+  if (request.session.user.role === "admin") {
+    // Check if user is admin
+    return response.render("landing", {
+      // Admin view
+      user: request.session.user, // Include user info
+      users: USERS.map(({ password, ...user }) => user), // Exclude passwords
+      isAdmin: true, // Flag for admin view
+    });
+  }
+
+  // Regular user view
+  response.render("landing", {
+    // Regular user view
+    user: request.session.user, // Include user info
+    isAdmin: false, // Flag for regular user view
+  });
+});
+app.get("/logout", (request, response) => {
+  request.session.destroy();
+  response.redirect("/");
+});
 // Start server
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);

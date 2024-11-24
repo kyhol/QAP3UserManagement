@@ -1,15 +1,22 @@
 <%- include('partials/header', { title: "Login" }) %>
-    <h1>Login</h1>
-    <form action="/login" method="POST">
-        <div class="form-input-container">
-            <label for="email">Email:</label>
-            <input type="email" name="email" id="email" required>
-        </div>
-        <div class="form-input-container">
-            <label for="password">Password:</label>
-            <input type="password" name="password" id="password" required>
-        </div>
-        <button type="submit">Login</button>
-    </form>
-    <p><a href="/">Go back</a></p>
+<h1>Login</h1>
+<% if (locals.error) { %>
+<div class="error-message"><%= error %></div>
+<% } %>
+<form action="/login" method="POST">
+  <div class="form-input-container">
+    <label for="email">Email:</label>
+    <input type="email" name="email" id="email" required />
+  </div>
+  <div class="form-input-container">
+    <label for="password">Password:</label>
+    <input type="password" name="password" id="password" required />
+  </div>
+  <div sign-up-container>
+    <label for="sign-up">Don't have an account?</label>
+    <button onclick="window.location.href='/signup'">Sign Up</button>
+    <button type="submit">Login</button>
+  </div>
+</form>
+<p><a href="/">Go back</a></p>
 <%- include('partials/footer') %>

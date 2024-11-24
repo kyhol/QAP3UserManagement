@@ -1,0 +1,36 @@
+<%- include('partials/header', { title: "Landing" }) %>
+<h1>Welcome, <%= user.username %></h1>
+
+<% if (isAdmin) { %>
+<!-- Admin view -->
+<h2>All Users</h2>
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Username</th>
+      <th>Email</th>
+      <th>Role</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% users.forEach(user => { %>
+    <tr>
+      <td><%= user.id %></td>
+      <td><%= user.username %></td>
+      <td><%= user.email %></td>
+      <td><%= user.role %></td>
+    </tr>
+    <% }) %>
+  </tbody>
+</table>
+<% } else { %>
+<!-- Regular user view -->
+<div class="user-info">
+  <p>Your email: <%= user.email %></p>
+  <p>Your role: <%= user.role %></p>
+</div>
+<% } %>
+
+<a href="/logout">Logout</a>
+<%- include('partials/footer') %>
