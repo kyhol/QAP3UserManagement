@@ -79,10 +79,10 @@ app.post("/signup", (request, response) => {
     "confirm-password": confirmPassword,
   } = request.body;
 
-  // Check if passwords match
-  if (password !== confirmPassword) {
-    return response.render("signup", {
-      error: "Passwords do not match",
+  // Added a cute confirm password. It's not in the scope but it annoyed me that it wasn't there :D 
+  if (password !== confirmPassword) { 
+    return response.render("signup", { 
+      error: "Passwords do not match", 
     });
   }
 
